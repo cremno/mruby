@@ -53,9 +53,29 @@ localtime_r(const time_t *timep, struct tm *result)
 #endif
 
 #ifdef NO_GMTIME_R
-#define gmtime_r(t,r) gmtime(t)
-#define localtime_r(t,r) localtime(t)
-#endif
+# define gmtime_r my_gmtime_r
+# define localtime_r my_localtime_r
+static struct tm *
+gmtime_r(const time_t *timep, struct tm *result)
+{
+  struct tm *t = gmtime(timep);
+  if (t) {
+    *result = *t;
+    t = result;
+  }
+  return t;
+}
+static struct tm *
+localtime_r(const time_t *timep, struct tm *result)
+{
+  struct tm *t = localtime(timep);
+  if (t) {
+    *result = *t;
+    t = result;
+  }
+  return t;
+}
+#endif  /* NO_GMTIME_R */
 
 #ifndef USE_SYSTEM_TIMEGM
 #define timegm my_timgm
@@ -144,9 +164,6 @@ mrb_time_update_datetime(struct mrb_time *self)
     aid = localtime_r(&self->sec, &self->datetime);
   }
   if (!aid) return NULL;
-#ifdef NO_GMTIME_R
-  self->datetime = *aid; /* copy data */
-#endif
 
   return self;
 }
