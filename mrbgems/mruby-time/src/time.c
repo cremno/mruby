@@ -35,15 +35,23 @@
 #include <sys/time.h>
 #endif
 
-#ifdef _WIN32
-#if _MSC_VER
-/* Win32 platform do not provide gmtime_r/localtime_r; emulate them using gmtime_s/localtime_s */
-#define gmtime_r(tp, tm)    ((gmtime_s((tm), (tp)) == 0) ? (tm) : NULL)
-#define localtime_r(tp, tm)    ((localtime_s((tm), (tp)) == 0) ? (tm) : NULL)
-#else
-#define NO_GMTIME_R
+/* pre-standardized version of C11's Annex K (Visual Studio 2005 and newer) */
+#if !defined NO_GMTIME_R && defined __STDC_SECURE_LIB__ && \
+    defined __STDC_WANT_SECURE_LIB__ && __STDC_WANT_SECURE_LIB__
+# define gmtime_r my_gmtime_r
+# define localtime_r my_localtime_r
+static struct tm *
+gmtime_r(const time_t *timep, struct tm *result)
+{
+  return gmtime_s(result, timep) == 0 ? result : NULL;
+}
+static struct tm *
+localtime_r(const time_t *timep, struct tm *result)
+{
+  return localtime_s(result, timep) == 0 ? result : NULL;
+}
 #endif
-#endif
+
 #ifdef NO_GMTIME_R
 #define gmtime_r(t,r) gmtime(t)
 #define localtime_r(t,r) (tzset(),localtime(t))
