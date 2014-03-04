@@ -54,7 +54,7 @@ localtime_r(const time_t *timep, struct tm *result)
 
 #ifdef NO_GMTIME_R
 #define gmtime_r(t,r) gmtime(t)
-#define localtime_r(t,r) (tzset(),localtime(t))
+#define localtime_r(t,r) localtime(t)
 #endif
 
 #ifndef USE_SYSTEM_TIMEGM
