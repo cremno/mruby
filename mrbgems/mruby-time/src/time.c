@@ -24,16 +24,6 @@
 /* does not have gmtime_r() and localtime_r(). */
 /* #define NO_GMTIME_R */
 
-#ifdef _WIN32
-#if _MSC_VER
-/* Win32 platform do not provide gmtime_r/localtime_r; emulate them using gmtime_s/localtime_s */
-#define gmtime_r(tp, tm)    ((gmtime_s((tm), (tp)) == 0) ? (tm) : NULL)
-#define localtime_r(tp, tm)    ((localtime_s((tm), (tp)) == 0) ? (tm) : NULL)
-#else
-#define NO_GMTIME_R
-#endif
-#endif
-
 /* timegm(3) */
 /* mktime() creates tm structure for localtime; timegm() is for UTF time */
 /* define following macro to use probably faster timegm() on the platform */
@@ -43,6 +33,16 @@
 
 #ifndef NO_GETTIMEOFDAY
 #include <sys/time.h>
+#endif
+
+#ifdef _WIN32
+#if _MSC_VER
+/* Win32 platform do not provide gmtime_r/localtime_r; emulate them using gmtime_s/localtime_s */
+#define gmtime_r(tp, tm)    ((gmtime_s((tm), (tp)) == 0) ? (tm) : NULL)
+#define localtime_r(tp, tm)    ((localtime_s((tm), (tp)) == 0) ? (tm) : NULL)
+#else
+#define NO_GMTIME_R
+#endif
 #endif
 #ifdef NO_GMTIME_R
 #define gmtime_r(t,r) gmtime(t)
