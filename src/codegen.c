@@ -140,7 +140,7 @@ new_label(codegen_scope *s)
   return s->pc;
 }
 
-static inline int
+static int
 genop(codegen_scope *s, mrb_code i)
 {
   if (s->pc == s->icapa) {
@@ -347,7 +347,7 @@ scope_error(codegen_scope *s)
   exit(EXIT_FAILURE);
 }
 
-static inline void
+static void
 dispatch(codegen_scope *s, int pc)
 {
   int diff = s->pc - pc;
@@ -404,7 +404,7 @@ push_(codegen_scope *s)
 #define pop_n(n) (s->sp-=(n))
 #define cursp() (s->sp)
 
-static inline int
+static int
 new_lit(codegen_scope *s, mrb_value val)
 {
   size_t i;
@@ -470,7 +470,7 @@ new_lit(codegen_scope *s, mrb_value val)
   return i;
 }
 
-static inline int
+static int
 new_msym(codegen_scope *s, mrb_sym sym)
 {
   size_t i, len;
@@ -489,7 +489,7 @@ new_msym(codegen_scope *s, mrb_sym sym)
   return i;
 }
 
-static inline int
+static int
 new_sym(codegen_scope *s, mrb_sym sym)
 {
   size_t i;

@@ -149,7 +149,7 @@ regexp_check(mrb_state *mrb, mrb_value obj)
   }
 }
 
-static inline mrb_int
+static mrb_int
 mrb_memsearch_qs(const unsigned char *xs, mrb_int m, const unsigned char *ys, mrb_int n)
 {
   const unsigned char *x = xs, *xe = xs + m;

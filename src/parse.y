@@ -3348,7 +3348,7 @@ static void pushback(parser_state *p, int c);
 static mrb_bool peeks(parser_state *p, const char *s);
 static mrb_bool skips(parser_state *p, const char *s);
 
-static inline int
+static int
 nextc(parser_state *p)
 {
   int c;
