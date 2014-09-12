@@ -5,6 +5,7 @@
 */
 
 #include <stdio.h>
+#define _POSIX_C_SOURCE 199506L  /* gmtime_r(), localtime_r() */
 #include <time.h>
 #include "mruby.h"
 #include "mruby/class.h"
