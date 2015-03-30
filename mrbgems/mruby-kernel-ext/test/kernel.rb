@@ -51,3 +51,8 @@ assert('Kernel#Hash') do
   assert_equal({:key => :value}, Hash(key: :value))
   assert_raise(TypeError) { Hash([1, 2, 3]) }
 end
+
+assert('Kernel#itself') do
+  o = Object.new
+  assert_equal(o, o.itself)
+end
