@@ -384,6 +384,17 @@ assert('Kernel#method_missing', '15.3.1.3.30') do
   rescue NoMethodError => e
     assert_equal "undefined method 'no_method_named_this' for #{d.to_s}", e.message
   end
+
+  class NoMethodMissingClass
+    undef method_missing
+  end
+  f = NoMethodMissingClass.new
+  begin
+    f.no_method_named_this
+  rescue NoMethodError => e
+    assert_equal "undefined method 'no_method_named_this' for #{f.to_s}", e.message
+  end
+
 end
 
 assert('Kernel#methods', '15.3.1.3.31') do

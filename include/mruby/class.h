@@ -60,6 +60,7 @@ MRB_API void mrb_define_method_id(mrb_state *mrb, struct RClass *c, mrb_sym mid,
 MRB_API void mrb_alias_method(mrb_state *mrb, struct RClass *c, mrb_sym a, mrb_sym b);
 
 MRB_API struct RClass *mrb_class_outer_module(mrb_state*, struct RClass *);
+MRB_API struct RProc *mrb_method_search_vm_missing(mrb_state*, struct RClass**, mrb_sym*);
 MRB_API struct RProc *mrb_method_search_vm(mrb_state*, struct RClass**, mrb_sym);
 MRB_API struct RProc *mrb_method_search(mrb_state*, struct RClass*, mrb_sym);
 

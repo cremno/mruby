@@ -1030,6 +1030,19 @@ mrb_define_module_function(mrb_state *mrb, struct RClass *c, const char *name, m
 }
 
 MRB_API struct RProc*
+mrb_method_search_vm_missing(mrb_state *mrb, struct RClass **cp, mrb_sym *mid)
+{
+  struct RProc *m;
+
+  *mid = mrb_intern_lit(mrb, "method_missing");
+  m = mrb_method_search_vm(mrb, cp, *mid);
+  if (!m) {
+    m = mrb->method_missing_proc;
+  }
+  return m;
+}
+
+MRB_API struct RProc*
 mrb_method_search_vm(mrb_state *mrb, struct RClass **cp, mrb_sym mid)
 {
   khiter_t k;
@@ -2062,6 +2075,8 @@ mrb_init_class(mrb_state *mrb)
   mrb_define_method(mrb, bob, "initialize",              mrb_bob_init,             MRB_ARGS_NONE());
   mrb_define_method(mrb, bob, "!",                       mrb_bob_not,              MRB_ARGS_NONE());
   mrb_define_method(mrb, bob, "method_missing",          mrb_bob_missing,          MRB_ARGS_ANY());  /* 15.3.1.3.30 */
+
+  mrb->method_missing_proc = mrb_proc_new_cfunc(mrb, mrb_bob_missing);
 
   mrb_define_class_method(mrb, cls, "new",               mrb_class_new_class,      MRB_ARGS_OPT(1));
   mrb_define_method(mrb, cls, "superclass",              mrb_class_superclass,     MRB_ARGS_NONE()); /* 15.2.3.3.4 */

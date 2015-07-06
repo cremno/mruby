@@ -177,6 +177,7 @@ typedef struct mrb_state {
   struct RClass *eException_class;
   struct RClass *eStandardError_class;
   struct RObject *nomem_err;              /* pre-allocated NoMemoryError */
+  struct RProc *method_missing_proc;
 
   void *ud; /* auxiliary data */
 
