@@ -174,6 +174,11 @@ exc_inspect(mrb_state *mrb, mrb_value exc)
   return str;
 }
 
+static mrb_value
+exc_backtrace(mrb_state *mrb, mrb_value self)
+{
+  return mrb_attr_get(mrb, self, mrb_intern_lit(mrb, "bt"));
+}
 
 static void
 exc_debug_info(mrb_state *mrb, struct RObject *exc)
@@ -207,6 +212,7 @@ mrb_exc_raise(mrb_state *mrb, mrb_value exc)
 {
   mrb->exc = mrb_obj_ptr(exc);
   if (!mrb->gc.out_of_memory) {
+    mrb_iv_set(mrb, exc, mrb_intern_lit(mrb, "bt"), mrb_get_backtrace(mrb));
     exc_debug_info(mrb, mrb->exc);
   }
   if (!mrb->jmp) {
@@ -449,7 +455,7 @@ mrb_init_exception(mrb_state *mrb)
   mrb_define_method(mrb, exception, "to_s",            exc_to_s,          MRB_ARGS_NONE());
   mrb_define_method(mrb, exception, "message",         exc_message,       MRB_ARGS_NONE());
   mrb_define_method(mrb, exception, "inspect",         exc_inspect,       MRB_ARGS_NONE());
-  mrb_define_method(mrb, exception, "backtrace",       mrb_exc_backtrace, MRB_ARGS_NONE());
+  mrb_define_method(mrb, exception, "backtrace",       exc_backtrace,     MRB_ARGS_NONE());
 
   mrb->eStandardError_class = mrb_define_class(mrb, "StandardError", mrb->eException_class); /* 15.2.23 */
   runtime_error = mrb_define_class(mrb, "RuntimeError", mrb->eStandardError_class);          /* 15.2.28 */

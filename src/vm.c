@@ -1481,6 +1481,7 @@ RETRY_TRY_BLOCK:
         ci = mrb->c->ci;
         mrb_obj_iv_ifnone(mrb, mrb->exc, mrb_intern_lit(mrb, "lastpc"), mrb_cptr_value(mrb, pc));
         mrb_obj_iv_ifnone(mrb, mrb->exc, mrb_intern_lit(mrb, "ciidx"), mrb_fixnum_value(ci - mrb->c->cibase));
+        mrb_obj_iv_ifnone(mrb, mrb->exc, mrb_intern_lit(mrb, "bt"), mrb_get_backtrace(mrb));
         eidx = ci->eidx;
         if (ci == mrb->c->cibase) {
           if (ci->ridx == 0) goto L_STOP;
